@@ -10,7 +10,7 @@
 ### ```availableSlots```
 #### Inputs:
 ```date: String```
-### Returns:
+#### Returns:
 ```AvailableSlot[]```
 
 
@@ -20,7 +20,7 @@
 ```date: String```
 ```serviceId: Int```
 ```slotTime: String```
-### Returns:
+#### Returns:
 ```String```
 
 ## Seed:
