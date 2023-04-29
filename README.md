@@ -20,9 +20,7 @@
 ## Mutations:
 ### ```bookSlot```
 #### Inputs:
-```date: String```
-```serviceId: Int```
-```slotTime: String```
+```BookSlotInput```
 #### Returns:
 ```String```
 
