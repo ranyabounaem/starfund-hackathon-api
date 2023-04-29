@@ -49,7 +49,8 @@ the third day starting from now is a public holiday.
 
 ## Tests:
 ### Query:
-```query {
+```
+query {
   availableSlots(date: "2023-05-01T06:24:38.549Z") {
     startTime
     endTime
@@ -58,7 +59,8 @@ the third day starting from now is a public holiday.
 }
 ```
 ### Response:
-```{
+```
+{
   "data": {
     "availableSlots": [
       {
