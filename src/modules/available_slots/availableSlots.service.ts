@@ -109,13 +109,10 @@ export class AvailableSlotsService {
                 minute: '2-digit',
                 timeZone: 'GMT',
               });
-              console.log(inputTimeSlot);
               if (serviceAvailableSlot.startTime === inputTimeSlot) {
                 const createBookedSlotInput = new CreateBookedSlotInput();
                 createBookedSlotInput.service = service;
-                console.log(inputDate.toISOString());
                 createBookedSlotInput.date = inputDate.toISOString();
-                console.log(createBookedSlotInput.date);
                 createBookedSlotInput.users = input.users;
                 this.bookedSlotsService.createBookedSlot(createBookedSlotInput);
                 return 'Successfully booked!';
@@ -152,7 +149,6 @@ export class AvailableSlotsService {
       if (
         this.checkSlotOverlapWithBookedSlots(inputDate, bookedSlots, tempSlot)
       ) {
-        console.log('Check slot overlap did not pass');
         checksPassed = false;
       }
 
@@ -233,7 +229,6 @@ export class AvailableSlotsService {
     bookedSlots: BookedSlot[],
     currentSlot: Slot,
   ) {
-    console.log(bookedSlots);
     for (let m = 0; m < bookedSlots.length; m++) {
       const bookedSlot = bookedSlots[m];
       const bookedSlotDate = new Date(bookedSlot.date);
@@ -266,7 +261,6 @@ export class AvailableSlotsService {
           serviceBreak.endTime,
         )
       ) {
-        console.log('slots in range');
         return true;
       }
     }
