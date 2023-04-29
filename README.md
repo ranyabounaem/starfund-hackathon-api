@@ -10,6 +10,8 @@
 ### ```availableSlots```
 #### Inputs:
 ```date: String```
+### Returns:
+```AvailableSlot[]```
 
 
 ## Mutations:
@@ -18,6 +20,8 @@
 ```date: String```
 ```serviceId: Int```
 ```slotTime: String```
+### Returns:
+```String```
 
 ## Seed:
 Men Haircut
