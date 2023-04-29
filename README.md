@@ -17,3 +17,24 @@
 ```serviceId: Int```
 ```slotTime: String```
 
+## Seed:
+Men Haircut
+slots for the next 7 days, Sunday off.
+from 08:00-20:00 Monday to Friday.
+from 10:00-22:00 Saturday.
+lunch break at 12:00-13:00.
+cleaning break at 15:00-16:00.
+max 3 clients per slot.
+slots every 10 minutes.
+5 minutes cleanup break between slots.
+the third day starting from now is a public holiday.
+Woman Haircut
+slots for the next 7 days, Sunday off.
+lunch break at 12:00-13:00.
+from 08:00-20:00 Monday to Friday.
+from 10:00-22:00 Saturday.
+cleaning break at 15:00-16:00.
+slots every 1 hour.
+10 minutes cleanup break.
+max 3 clients per slot.
+the third day starting from now is a public holiday.
