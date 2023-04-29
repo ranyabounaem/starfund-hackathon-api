@@ -9,4 +9,11 @@ export class ServiceDaysService {
     @InjectRepository(ServiceDay)
     private serviceDaysRepository: Repository<ServiceDay>,
   ) {}
+
+  async getServiceDaysByServiceId(serviceId: number): Promise<ServiceDay[]> {
+    return await this.serviceDaysRepository
+      .createQueryBuilder('serviceDay')
+      .where('serviceDay.service = :serviceId', { serviceId: serviceId })
+      .getMany();
+  }
 }

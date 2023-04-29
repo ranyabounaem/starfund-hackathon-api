@@ -9,38 +9,60 @@ import { BookedSlot } from '../booked_slots/bookedSlots.entity';
 import { Break } from '../breaks/breaks.entity';
 import { BookSlotInput } from './dtos/book-slot.input';
 import { differenceInDays } from 'date-fns';
+import { ServiceDaysService } from '../service_days/serviceDays.service';
+import { BreaksService } from '../breaks/breaks.service';
+import { BookedSlotsService } from '../booked_slots/bookedSlots.service';
 
 @Injectable()
 export class AvailableSlotsService {
-  constructor(private readonly servicesService: ServicesService) {}
+  constructor(
+    private readonly breaksService: BreaksService,
+    private readonly bookedSlotsService: BookedSlotsService,
+    private readonly servicesService: ServicesService,
+    private readonly serviceDaysService: ServiceDaysService,
+  ) {}
   async findAllAvailableSlots(date: string): Promise<AvailableSlot[]> {
+    // Input date from string to Date
     const inputDate: Date = new Date(date);
+    // Day enum (example: 0 for 'Monday' - 1 for 'Tuesday' ...)
     const day = inputDate.getDay();
+    // Initialize empty available slots array
     const availableSlots: AvailableSlot[] = [];
+    // Fetch all services
     const services = await this.servicesService.getAllServices();
-    services.forEach((service) => {
-      for (let i = 0; i < service.publicHolidays.length; i++) {
+    for (let i = 0; i < services.length; i++) {
+      const service = services[i];
+      for (let j = 0; j < service.publicHolidays.length; j++) {
         const publicHoliday = service.publicHolidays[i];
+        // Service public holiday from string to Date
         const publicHolidayAsDate = new Date(publicHoliday);
-        // 1. Check if service's public holiday is nit same day as input date
+        // 1. Check if service's public holiday is not same day as input date
         if (!isSameDay(publicHolidayAsDate, inputDate)) {
-          service.serviceDays.forEach((serviceDay) => {
+          // Fetch service days with same service id
+          const serviceDays =
+            await this.serviceDaysService.getServiceDaysByServiceId(service.id);
+          // Loop on each service day
+          for (let k = 0; k < serviceDays.length; k++) {
+            const serviceDay = serviceDays[k];
             // 2. Check if inputDate's day is one of service's days
             if (serviceDay.weekDay === day) {
               // 3. Check possible slots during the week day if
               // they overlap with breaks or booked slots
-              this.getServiceAvailableSlots(
-                inputDate,
-                service,
-                serviceDay,
+              (
+                await this.getServiceAvailableSlots(
+                  inputDate,
+                  service,
+                  serviceDay,
+                )
               ).forEach((serviceAvailableSlot) => {
                 availableSlots.push(serviceAvailableSlot);
               });
             }
-          });
+          }
         }
       }
-    });
+    }
+
     return availableSlots;
   }
 
@@ -62,15 +84,17 @@ export class AvailableSlotsService {
       const publicHolidayAsDate = new Date(publicHoliday);
       // 1. Check if service's public holiday is nit same day as input date
       if (!isSameDay(publicHolidayAsDate, inputDate)) {
-        service.serviceDays.forEach((serviceDay) => {
+        service.serviceDays.forEach(async (serviceDay) => {
           // 2. Check if inputDate's day is one of service's days
           if (serviceDay.weekDay === day) {
             // 3. Check possible slots during the week day if
             // they overlap with breaks or booked slots
-            this.getServiceAvailableSlots(
-              inputDate,
-              service,
-              serviceDay,
+            (
+              await this.getServiceAvailableSlots(
+                inputDate,
+                service,
+                serviceDay,
+              )
             ).forEach((serviceAvailableSlot) => {
               // Check if input time slot is matching one of the available slots
               if (serviceAvailableSlot.startTime === input.slotTime) {
@@ -95,18 +119,18 @@ export class AvailableSlotsService {
     return 'Failed to book!';
   }
 
-  getServiceAvailableSlots(
+  async getServiceAvailableSlots(
     inputDate: Date,
     service: Service,
     serviceDay: ServiceDay,
-  ): AvailableSlot[] {
+  ): Promise<AvailableSlot[]> {
     const serviceAvailableSlots: AvailableSlot[] = [];
     // Generate initial possible time slot
     let tempSlot = new Slot();
     tempSlot.startTime = serviceDay.startTime;
     tempSlot.endTime = this.addMinutesToTime(
       tempSlot.startTime,
-      service.slotBreakDurationInMinutes + service.slotDurationInMinutes,
+      service.slotDurationInMinutes,
     );
 
     while (
@@ -116,14 +140,19 @@ export class AvailableSlotsService {
       if (
         this.checkSlotOverlapWithBookedSlots(
           inputDate,
-          service.bookedSlots,
+          await this.bookedSlotsService.getAllBookedSlotsByServiceId(
+            service.id,
+          ),
           tempSlot,
         )
       ) {
         checksPassed = false;
       }
-
-      if (this.checkSlotOverlapWithBreaks(service.breaks, tempSlot)) {
+      const breaks = await this.breaksService.getAllBreaksByServiceId(
+        service.id,
+      );
+      if (this.checkSlotOverlapWithBreaks(breaks, tempSlot)) {
+        console.log('Check did not pass');
         checksPassed = false;
       }
 
@@ -170,28 +199,12 @@ export class AvailableSlotsService {
     slotDuration: number,
     slotBreakDuration: number,
   ): Slot {
-    const minutesToAdd = slotDuration + slotBreakDuration;
-
-    const slotStartDate = new Date(`1970-01-01T${currentSlot.startTime}:00Z`);
-    const slotEndDate = new Date(`1970-01-01T${currentSlot.endTime}:00Z`);
-
-    slotStartDate.setMinutes(slotStartDate.getMinutes() + minutesToAdd);
-    slotEndDate.setMinutes(slotEndDate.getMinutes() + minutesToAdd);
-
-    const nextSlotStartTime = slotStartDate.toLocaleTimeString('en-US', {
-      hour12: false,
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-    const nextSlotEndTime = slotEndDate.toLocaleTimeString('en-US', {
-      hour12: false,
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-
     const nextSlot = new Slot();
-    nextSlot.startTime = nextSlotStartTime;
-    nextSlot.endTime = nextSlotEndTime;
+    nextSlot.startTime = this.addMinutesToTime(
+      currentSlot.endTime,
+      slotBreakDuration,
+    );
+    nextSlot.endTime = this.addMinutesToTime(nextSlot.startTime, slotDuration);
     return nextSlot;
   }
 
@@ -202,6 +215,7 @@ export class AvailableSlotsService {
       hour12: false,
       hour: '2-digit',
       minute: '2-digit',
+      timeZone: 'GMT',
     });
     return updatedTime;
   }
@@ -217,6 +231,7 @@ export class AvailableSlotsService {
         hour12: false,
         hour: '2-digit',
         minute: '2-digit',
+        timeZone: 'GMT',
       });
       if (
         isSameDay(inputDate, bookedSlotDate) &&
@@ -232,7 +247,8 @@ export class AvailableSlotsService {
     serviceBreaks: Break[],
     currentSlot: Slot,
   ): boolean {
-    serviceBreaks.forEach((serviceBreak) => {
+    for (let i = 0; i < serviceBreaks.length; i++) {
+      const serviceBreak = serviceBreaks[i];
       if (
         this.slotIsInRange(
           currentSlot,
@@ -240,9 +256,10 @@ export class AvailableSlotsService {
           serviceBreak.endTime,
         )
       ) {
+        console.log('slots in range');
         return true;
       }
-    });
+    }
     return false;
   }
 }

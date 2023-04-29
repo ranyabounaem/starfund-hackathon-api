@@ -6,5 +6,6 @@ import { BreaksService } from './breaks.service';
 @Module({
   imports: [TypeOrmModule.forFeature([Break])],
   providers: [BreaksService],
+  exports: [BreaksService],
 })
 export class BreaksModule {}

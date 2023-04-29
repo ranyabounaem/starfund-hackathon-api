@@ -16,4 +16,11 @@ export class BookedSlotsService {
     bookedSlot = await bookedSlot.save();
     return bookedSlot;
   }
+
+  async getAllBookedSlotsByServiceId(serviceId: number): Promise<BookedSlot[]> {
+    return this.bookedSlotsRepository
+      .createQueryBuilder('bookedSlot')
+      .where('bookedSlot.service = :serviceId', { serviceId: serviceId })
+      .getMany();
+  }
 }

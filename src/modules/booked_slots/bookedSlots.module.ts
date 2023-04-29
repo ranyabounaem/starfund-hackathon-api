@@ -6,5 +6,6 @@ import { BookedSlotsService } from './bookedSlots.service';
 @Module({
   imports: [TypeOrmModule.forFeature([BookedSlot])],
   providers: [BookedSlotsService],
+  exports: [BookedSlotsService],
 })
 export class BookedSlotsModule {}

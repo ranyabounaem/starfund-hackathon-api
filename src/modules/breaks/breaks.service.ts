@@ -9,4 +9,10 @@ export class BreaksService {
     @InjectRepository(Break)
     private breaksRepository: Repository<Break>,
   ) {}
+  async getAllBreaksByServiceId(serviceId: number): Promise<Break[]> {
+    return await this.breaksRepository
+      .createQueryBuilder('break')
+      .where('break.service = :serviceId', { serviceId: serviceId })
+      .getMany();
+  }
 }

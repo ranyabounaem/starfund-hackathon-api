@@ -6,5 +6,6 @@ import { ServiceDay } from './serviceDays.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([ServiceDay])],
   providers: [ServiceDaysService],
+  exports: [ServiceDaysService],
 })
 export class ServiceDaysModule {}
