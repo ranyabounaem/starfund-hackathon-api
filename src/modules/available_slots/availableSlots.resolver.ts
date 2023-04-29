@@ -1,8 +1,9 @@
 import { Resolver } from '@nestjs/graphql';
 import { AvailableSlot } from './availableSlots.entity';
-import { Args, Query } from '@nestjs/graphql';
+import { Args, Query, Mutation } from '@nestjs/graphql';
 
 import { AvailableSlotsService } from './availableSlots.service';
+import { BookSlotInput } from './dtos/book-slot.input';
 
 @Resolver(() => AvailableSlot)
 export class AvailableSlotsResolver {
@@ -15,5 +16,13 @@ export class AvailableSlotsResolver {
     date: string,
   ): Promise<AvailableSlot[]> {
     return await this.availableSlotsService.findAllAvailableSlots(date);
+  }
+
+  @Mutation(() => String, { name: 'bookAvailableSlot' })
+  async bookAvailableSlot(
+    @Args('input')
+    input: BookSlotInput,
+  ): Promise<string> {
+    return await this.availableSlotsService.bookSlot(input);
   }
 }

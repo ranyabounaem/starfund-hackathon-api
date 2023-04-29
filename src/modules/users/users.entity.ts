@@ -8,18 +8,23 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { BookedSlot } from '../booked_slots/bookedSlots.entity';
+import { Field, InputType } from '@nestjs/graphql';
 
+@InputType()
 @Entity('user')
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Field()
   @Column()
   firstName: string;
 
+  @Field()
   @Column()
   lastName: string;
 
+  @Field()
   @Column()
   email: string;
 

@@ -7,6 +7,8 @@ import { ServiceDay } from '../service_days/serviceDays.entity';
 import { Slot } from 'src/common/dtos/slot.dto';
 import { BookedSlot } from '../booked_slots/bookedSlots.entity';
 import { Break } from '../breaks/breaks.entity';
+import { BookSlotInput } from './dtos/book-slot.input';
+import { differenceInDays } from 'date-fns';
 
 @Injectable()
 export class AvailableSlotsService {
@@ -40,6 +42,57 @@ export class AvailableSlotsService {
       }
     });
     return availableSlots;
+  }
+
+  async bookSlot(input: BookSlotInput): Promise<string> {
+    const service = await this.servicesService.getService(input.serviceId);
+    const inputDate = new Date(input.date);
+    if (
+      differenceInDays(inputDate, Date.now()) > service.allowedBookingInterval
+    ) {
+      return `Cannot book more than ${service.allowedBookingInterval} days ahead`;
+    }
+
+    if (input.users.length > service.maxClientsPerSlot) {
+      return `Cannot book for more than ${service.maxClientsPerSlot} clients`;
+    }
+    const day = inputDate.getDay();
+    for (let i = 0; i < service.publicHolidays.length; i++) {
+      const publicHoliday = service.publicHolidays[i];
+      const publicHolidayAsDate = new Date(publicHoliday);
+      // 1. Check if service's public holiday is nit same day as input date
+      if (!isSameDay(publicHolidayAsDate, inputDate)) {
+        service.serviceDays.forEach((serviceDay) => {
+          // 2. Check if inputDate's day is one of service's days
+          if (serviceDay.weekDay === day) {
+            // 3. Check possible slots during the week day if
+            // they overlap with breaks or booked slots
+            this.getServiceAvailableSlots(
+              inputDate,
+              service,
+              serviceDay,
+            ).forEach((serviceAvailableSlot) => {
+              // Check if input time slot is matching one of the available slots
+              if (serviceAvailableSlot.startTime === input.slotTime) {
+                const bookedSlot = new BookedSlot();
+                const bookedSlotDate = new Date(input.date);
+                bookedSlotDate.setHours(
+                  +serviceAvailableSlot.startTime.split(';')[0],
+                );
+                bookedSlotDate.setMinutes(
+                  +serviceAvailableSlot.startTime.split(';')[1],
+                );
+                bookedSlot.date = bookedSlotDate.toUTCString();
+                bookedSlot.users = input.users;
+                this.servicesService.updateService(service.id, bookedSlot);
+                return 'Successfully booked!';
+              }
+            });
+          }
+        });
+      }
+    }
+    return 'Failed to book!';
   }
 
   getServiceAvailableSlots(

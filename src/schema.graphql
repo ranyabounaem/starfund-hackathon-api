@@ -8,6 +8,23 @@ type AvailableSlot {
   startTime: String!
 }
 
+input BookSlotInput {
+  date: String!
+  serviceId: Int!
+  slotTime: String!
+  users: [User!]!
+}
+
+type Mutation {
+  bookAvailableSlot(input: BookSlotInput!): String!
+}
+
 type Query {
   availableSlots(date: String!): [AvailableSlot!]
+}
+
+input User {
+  email: String!
+  firstName: String!
+  lastName: String!
 }
