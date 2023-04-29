@@ -8,11 +8,6 @@ import { Break } from '../modules/breaks/breaks.entity';
 
 const serviceDays = [
   {
-    weekDay: 0,
-    startTime: '08:00',
-    endTime: '20:00',
-  },
-  {
     weekDay: 1,
     startTime: '08:00',
     endTime: '20:00',
@@ -34,6 +29,11 @@ const serviceDays = [
   },
   {
     weekDay: 5,
+    startTime: '08:00',
+    endTime: '20:00',
+  },
+  {
+    weekDay: 6,
     startTime: '10:00',
     endTime: '22:00',
   },
