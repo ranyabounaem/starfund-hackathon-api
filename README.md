@@ -9,3 +9,11 @@
 ## Queries:
 ### ```availableSlots```
 #### Inputs:
+```date: String```
+
+### ```bookSlot```
+#### Inputs:
+```date: String```
+```serviceId: Int```
+```slotTime: String```
+
