@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
+ <img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" />
 </p>
 
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
@@ -20,9 +20,7 @@
 ## Mutations:
 ### ```bookSlot```
 #### Inputs:
-```date: String```
-```serviceId: Int```
-```slotTime: String```
+```BookSlotInput```
 #### Returns:
 ```String```
 
