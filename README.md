@@ -6,6 +6,9 @@
 [circleci-url]: https://circleci.com/gh/nestjs/nest
 
 # Back-end API for time scheduling application using Nest.js + GraphQL + TypeORM + PostgreSQL
+## Database:
+![StarfundHackathonERD drawio](https://user-images.githubusercontent.com/47700580/235281465-2133c3bf-3059-4052-9b0c-2c1fbcfdb4cf.png)
+
 ## Queries:
 ### ```availableSlots```
 #### Inputs:
