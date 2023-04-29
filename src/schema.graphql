@@ -2,23 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-input CreateUserInput {
-  email: String!
-  firstName: String!
-  lastName: String!
-}
-
-type Mutation {
-  createUser(input: CreateUserInput!): User!
+type AvailableSlot {
+  endTime: String!
+  serviceId: Float!
+  startTime: String!
 }
 
 type Query {
-  users: [User!]!
-}
-
-type User {
-  email: String!
-  firstName: String!
-  id: Int!
-  lastName: String!
+  availableSlots(date: String!): [AvailableSlot!]
 }

@@ -7,29 +7,23 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { BookedSlot } from '../bookedSlots/bookedSlots.entity';
+import { BookedSlot } from '../booked_slots/bookedSlots.entity';
 
 @Entity('user')
-// @ObjectType()
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
-  // @Field(() => Int)
   id: number;
 
   @Column()
-  // @Field()
   firstName: string;
 
   @Column()
-  // @Field()
   lastName: string;
 
   @Column()
-  // @Field()
   email: string;
 
   @ManyToOne(() => BookedSlot, (bookedSlot) => bookedSlot.users)
   @JoinColumn({ name: 'bookedSlot' })
-  // @Field(() => BookedSlot)
   bookedSlot: BookedSlot;
 }

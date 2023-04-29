@@ -16,4 +16,9 @@ export class ServicesService {
     service = await service.save();
     return service;
   }
+
+  async getAllServices(): Promise<Service[]> {
+    const services = await this.servicesRepository.find();
+    return services;
+  }
 }

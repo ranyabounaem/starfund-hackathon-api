@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BookedSlot } from './bookedSlots.entity';
+import { CreateBookedSlotInput } from './dtos/create-bookedSlot.input';
 
 @Injectable()
 export class BookedSlotsService {
@@ -10,9 +11,9 @@ export class BookedSlotsService {
     private bookedSlotsRepository: Repository<BookedSlot>,
   ) {}
 
-  async createBookedSlot(input: CreateBookedSlotInput): Promise<Service> {
-    let service = this.bookedSlotsRepository.create(input);
-    service = await service.save();
-    return service;
+  async createBookedSlot(input: CreateBookedSlotInput): Promise<BookedSlot> {
+    let bookedSlot = this.bookedSlotsRepository.create();
+    bookedSlot = await bookedSlot.save();
+    return bookedSlot;
   }
 }

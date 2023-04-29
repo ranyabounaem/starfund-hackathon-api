@@ -1,5 +1,3 @@
-import { registerEnumType } from '@nestjs/graphql';
-
 export enum Day {
   Monday = 0,
   Tuesday = 1,
@@ -9,7 +7,3 @@ export enum Day {
   Saturday = 5,
   Sunday = 6,
 }
-
-registerEnumType(Day, {
-  name: 'Day',
-});

@@ -5,11 +5,19 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ServicesModule } from './modules/services/services.module';
+import { ServiceDaysModule } from './modules/service_days/serviceDays.module';
+import { BreaksModule } from './modules/breaks/breaks.module';
+import { AvailableSlotsModule } from './modules/available_slots/availableSlots.module';
+import { BookedSlotsModule } from './modules/booked_slots/bookedSlots.module';
 
 @Module({
   imports: [
     UsersModule,
     ServicesModule,
+    ServiceDaysModule,
+    BreaksModule,
+    BookedSlotsModule,
+    AvailableSlotsModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.graphql'),

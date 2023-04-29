@@ -1,4 +1,3 @@
-// import { Field, Int, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   Entity,
@@ -6,50 +5,46 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
 } from 'typeorm';
-import { BookedSlot } from '../bookedSlots/bookedSlots.entity';
+import { BookedSlot } from '../booked_slots/bookedSlots.entity';
 import { Break } from '../breaks/breaks.entity';
-import { ServiceDay } from '../serviceDays/serviceDays.entity';
+import { ServiceDay } from '../service_days/serviceDays.entity';
 
 @Entity('service')
-// @ObjectType()
 export class Service extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  // @Field()
   name: string;
 
-  @OneToMany(() => BookedSlot, (bookedSlot) => bookedSlot.service)
-  // @Field(() => [BookedSlot], { nullable: true })
+  @OneToMany(() => BookedSlot, (bookedSlot) => bookedSlot.service, {
+    nullable: true,
+  })
   bookedSlots: BookedSlot[];
 
   @OneToMany(() => Break, (breakInstance) => breakInstance.service, {
     cascade: true,
     nullable: true,
   })
-  // @Field(() => [Break])
   breaks: Break[];
 
   @OneToMany(() => ServiceDay, (serviceDay) => serviceDay.service, {
     cascade: true,
   })
-  // @Field(() => [ServiceDay])
   serviceDays: ServiceDay[];
 
   @Column()
-  // @Field(() => Int)
-  slotDuration: number;
+  slotDurationInMinutes: number;
 
   @Column()
-  // @Field(() => Int)
-  breakBetweenSlots: number;
+  slotBreakDurationInMinutes: number;
 
   @Column()
-  // @Field(() => Int)
   allowedBookingInterval: number;
 
   @Column()
-  // @Field(() => Int)
   maxClientsPerSlot: number;
+
+  @Column('text', { array: true })
+  publicHolidays: string[];
 }
