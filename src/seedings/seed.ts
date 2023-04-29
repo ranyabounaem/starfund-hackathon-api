@@ -41,10 +41,12 @@ const serviceDays = [
 
 const breaks = [
   {
+    name: 'Lunch Break',
     startTime: '12:00',
     endTime: '13:00',
   },
   {
+    name: 'Cleaning Break',
     startTime: '15:00',
     endTime: '16:00',
   },

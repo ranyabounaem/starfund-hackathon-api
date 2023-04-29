@@ -14,6 +14,9 @@ export class Break extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  name: string;
+
   @ManyToOne(() => Service, (service) => service.breaks)
   @JoinColumn({ name: 'service' })
   service: Service;

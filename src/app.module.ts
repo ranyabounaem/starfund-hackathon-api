@@ -9,6 +9,7 @@ import { ServiceDaysModule } from './modules/service_days/serviceDays.module';
 import { BreaksModule } from './modules/breaks/breaks.module';
 import { AvailableSlotsModule } from './modules/available_slots/availableSlots.module';
 import { BookedSlotsModule } from './modules/booked_slots/bookedSlots.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -18,6 +19,9 @@ import { BookedSlotsModule } from './modules/booked_slots/bookedSlots.module';
     BreaksModule,
     BookedSlotsModule,
     AvailableSlotsModule,
+    ConfigModule.forRoot({
+      envFilePath: '../.env',
+    }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.graphql'),
