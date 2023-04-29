@@ -7,8 +7,9 @@
 
 # Back-end API for time scheduling application using Nest.js + GraphQL + TypeORM + PostgreSQL
 ## Database:
-![StarfundHackathonERD drawio](https://user-images.githubusercontent.com/47700580/235281465-2133c3bf-3059-4052-9b0c-2c1fbcfdb4cf.png)
-
+![StarfundHackathonERD drawio](https://user-images.githubusercontent.com/47700580/235284144-b5732301-debc-44c0-aeec-cae69df09cb0.png)
+### Seeding the database:
+```ts-node src/seedings/seed.ts```
 ## Queries:
 ### ```availableSlots```
 #### Inputs:
