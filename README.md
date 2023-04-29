@@ -11,6 +11,8 @@
 #### Inputs:
 ```date: String```
 
+
+## Mutations:
 ### ```bookSlot```
 #### Inputs:
 ```date: String```
