@@ -7,7 +7,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Service } from '../services/services.entity';
-import { Day } from 'src/common/enums/day.enum';
+import { Day } from '../../common/enums/day.enum';
 
 @Entity('serviceDay')
 export class ServiceDay extends BaseEntity {

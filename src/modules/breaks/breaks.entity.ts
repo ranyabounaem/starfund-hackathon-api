@@ -18,9 +18,6 @@ export class Break extends BaseEntity {
   @JoinColumn({ name: 'service' })
   service: Service;
 
-  @Column({ type: 'enum', enum: Day })
-  weekDay: number;
-
   @Column()
   startTime: string;
 
