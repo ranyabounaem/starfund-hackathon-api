@@ -7,8 +7,6 @@ export class BookSlotInput {
   date: string;
   @Field(() => Int)
   serviceId: number;
-  @Field()
-  slotTime: string;
   @Field(() => [User])
   users: User[];
 }

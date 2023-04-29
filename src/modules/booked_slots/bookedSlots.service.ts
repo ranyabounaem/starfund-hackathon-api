@@ -12,7 +12,7 @@ export class BookedSlotsService {
   ) {}
 
   async createBookedSlot(input: CreateBookedSlotInput): Promise<BookedSlot> {
-    let bookedSlot = this.bookedSlotsRepository.create();
+    let bookedSlot = this.bookedSlotsRepository.create(input);
     bookedSlot = await bookedSlot.save();
     return bookedSlot;
   }

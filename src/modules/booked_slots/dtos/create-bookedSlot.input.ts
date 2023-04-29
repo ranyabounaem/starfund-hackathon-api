@@ -1,12 +1,8 @@
-import { Break } from 'src/modules/breaks/breaks.entity';
-import { ServiceDay } from 'src/modules/service_days/serviceDays.entity';
+import { Service } from 'src/modules/services/services.entity';
+import { User } from 'src/modules/users/users.entity';
 
 export class CreateBookedSlotInput {
-  name: string;
-  breaks: Break[];
-  serviceDays: ServiceDay[];
-  slotDuration: number;
-  breakBetweenSlots: number;
-  allowedBookingInterval: number;
-  maxClientsPerSlot: number;
+  service: Service;
+  date: string;
+  users: User[];
 }

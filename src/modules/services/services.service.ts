@@ -30,13 +30,13 @@ export class ServicesService {
     return service;
   }
 
-  async updateService(
-    serviceId: number,
-    bookedSlot: BookedSlot,
-  ): Promise<Service> {
-    const service = await this.servicesRepository.findOneBy({ id: serviceId });
-    service.bookedSlots.push(bookedSlot);
-    service.save();
-    return service;
-  }
+  // async updateService(
+  //   serviceId: number,
+  //   bookedSlot: BookedSlot,
+  // ): Promise<Service> {
+  //   const service = await this.servicesRepository.findOneBy({ id: serviceId });
+  //   service.bookedSlots.push(bookedSlot);
+  //   service.save();
+  //   return service;
+  // }
 }
